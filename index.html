@@ -1,0 +1,291 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ceris Nail｜美甲預約</title>
+  <style>
+    :root {
+      --cream: #faf7f2;
+      --pink: #ead4d0;
+      --rose: #a66f72;
+      --brown: #493b38;
+      --white: #fffefd;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--brown);
+      font-family: "Noto Sans TC", sans-serif;
+      line-height: 1.7;
+    }
+
+    header {
+      padding: 22px 7%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #eadfd8;
+      background: var(--white);
+    }
+
+    .logo {
+      font-family: Georgia, serif;
+      font-size: 29px;
+      letter-spacing: 3px;
+    }
+
+    header a {
+      color: var(--brown);
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .hero {
+      min-height: 390px;
+      padding: 76px 8%;
+      display: flex;
+      align-items: center;
+      background: linear-gradient(120deg, #f5e8e2, #faf7f2 70%);
+    }
+
+    .hero-inner { max-width: 560px; }
+
+    .eyebrow {
+      color: var(--rose);
+      letter-spacing: 3px;
+      font-size: 12px;
+    }
+
+    h1 {
+      font-family: Georgia, serif;
+      font-size: clamp(42px, 7vw, 68px);
+      line-height: 1.15;
+      font-weight: 400;
+      margin: 18px 0;
+    }
+
+    .hero p { color: #796965; }
+
+    .button {
+      display: inline-block;
+      margin-top: 18px;
+      padding: 12px 28px;
+      background: var(--rose);
+      color: white;
+      border: 0;
+      border-radius: 3px;
+      text-decoration: none;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    section { padding: 60px 8%; }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .section-title h2 {
+      font-family: Georgia, serif;
+      font-size: 32px;
+      font-weight: 400;
+      margin-bottom: 5px;
+    }
+
+    .section-title p {
+      color: #887873;
+      font-size: 14px;
+    }
+
+    .services {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 18px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .service {
+      background: var(--white);
+      padding: 27px;
+      border: 1px solid #eee3dc;
+    }
+
+    .service h3 { margin-top: 0; }
+
+    .price {
+      color: var(--rose);
+      font-size: 23px;
+      font-family: Georgia, serif;
+    }
+
+    .service p {
+      font-size: 14px;
+      color: #81736e;
+    }
+
+    #booking { background: #f2e7e1; }
+
+    form {
+      max-width: 580px;
+      margin: auto;
+      background: var(--white);
+      padding: 30px;
+      border-radius: 5px;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 6px;
+      font-size: 14px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ded2ca;
+      border-radius: 3px;
+      background: white;
+      color: var(--brown);
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    form .button { width: 100%; }
+
+    #message {
+      margin-top: 15px;
+      color: var(--rose);
+      text-align: center;
+    }
+
+    footer {
+      padding: 30px;
+      text-align: center;
+      font-size: 13px;
+      color: #887873;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Ceris Nail</div>
+    <a href="#booking">線上預約 ↗</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="eyebrow">YOUR BEAUTY, YOUR MOMENT</div>
+        <h1>A little beauty,<br>a lot of you.</h1>
+        <p>為日常留一點溫柔，讓每一次美甲，<br>都成為專屬於你的美好時刻。</p>
+        <a class="button" href="#booking">預約我的美甲</a>
+      </div>
+    </section>
+
+    <section id="services">
+      <div class="section-title">
+        <h2>Our Services</h2>
+        <p>找到最適合你的指尖風格</p>
+      </div>
+
+      <div class="services">
+        <article class="service">
+          <h3>單色美甲</h3>
+          <div class="price">NT$ 依報價</div>
+          <p>簡約、耐看，打造日常質感。</p>
+        </article>
+        <article class="service">
+          <h3>造型設計</h3>
+          <div class="price">NT$ 依款式</div>
+          <p>依照喜歡的風格，設計專屬款式。</p>
+        </article>
+        <article class="service">
+          <h3>卸甲服務</h3>
+          <div class="price">NT$ 依狀況</div>
+          <p>依原有凝膠及指甲狀況評估。</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="booking">
+      <div class="section-title">
+        <h2>Make an Appointment</h2>
+        <p>填寫預約需求，期待與你見面</p>
+      </div>
+
+      <form id="bookingForm">
+        <label for="name">姓名 *</label>
+        <input id="name" name="name" required
+          placeholder="請輸入姓名">
+
+        <label for="contact">聯絡方式 *</label>
+        <input id="contact" name="contact" required
+          placeholder="LINE ID 或電話">
+
+        <label for="service">預約項目 *</label>
+        <select id="service" name="service" required>
+          <option value="">請選擇服務</option>
+          <option>單色美甲</option>
+          <option>造型設計</option>
+          <option>卸甲服務</option>
+        </select>
+
+        <label for="date">希望預約日期 *</label>
+        <input id="date" name="date" type="date" required>
+
+        <label for="time">希望預約時段 *</label>
+        <select id="time" name="time" required>
+          <option value="">請選擇時段</option>
+          <option>10:00</option>
+          <option>12:00</option>
+          <option>14:00</option>
+          <option>16:00</option>
+          <option>18:00</option>
+        </select>
+
+        <label for="notes">款式需求或備註</label>
+        <textarea id="notes" name="notes"
+          placeholder="例如：是否需要卸甲、喜歡的款式"></textarea>
+
+        <button class="button" type="submit">送出預約需求</button>
+        <div id="message" role="status"></div>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <div class="logo">Ceris Nail</div>
+    <p>讓美好，從指尖開始。</p>
+    <p>© Ceris Nail</p>
+  </footer>
+
+  <script>
+    const dateInput = document.getElementById("date");
+    const today = new Date();
+    const localToday = new Date(
+      today.getTime() - today.getTimezoneOffset() * 60000
+    ).toISOString().slice(0, 10);
+
+    dateInput.min = localToday;
+
+    document.getElementById("bookingForm").addEventListener(
+      "submit", function(event) {
+        event.preventDefault();
+        document.getElementById("message").textContent =
+          "這是預覽版本，尚未真正送出預約。下一步將連接雲端資料庫。";
+      }
+    );
+  </script>
+</body>
+</html>
