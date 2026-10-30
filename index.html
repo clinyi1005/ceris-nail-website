@@ -5,6 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ceris Nail｜美甲預約</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     :root {
       --cream: #faf7f2;
@@ -82,6 +85,11 @@
       text-decoration: none;
       cursor: pointer;
       font-size: 15px;
+    }
+
+    .button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
 
     section { padding: 60px 8%; }
@@ -165,9 +173,14 @@
 
     #message {
       margin-top: 15px;
-      color: var(--rose);
       text-align: center;
+      font-size: 14px;
+      white-space: pre-line;
     }
+
+    .success { color: #56815c; }
+    .error { color: #b34f4f; }
+    .info { color: var(--rose); }
 
     footer {
       padding: 30px;
@@ -175,117 +188,372 @@
       font-size: 13px;
       color: #887873;
     }
+
+    @media (max-width: 600px) {
+      header { padding: 18px 6%; }
+      section { padding: 45px 6%; }
+      form { padding: 22px; }
+    }
   </style>
 </head>
+
 <body>
-  <header>
-    <div class="logo">Ceris Nail</div>
-    <a href="#booking">線上預約 ↗</a>
-  </header>
 
-  <main>
-    <section class="hero">
-      <div class="hero-inner">
-        <div class="eyebrow">YOUR BEAUTY, YOUR MOMENT</div>
-        <h1>A little beauty,<br>a lot of you.</h1>
-        <p>為日常留一點溫柔，讓每一次美甲，<br>都成為專屬於你的美好時刻。</p>
-        <a class="button" href="#booking">預約我的美甲</a>
-      </div>
-    </section>
+<header>
+  <div class="logo">Ceris Nail</div>
+  <a href="#booking">線上預約 ↗</a>
+</header>
 
-    <section id="services">
-      <div class="section-title">
-        <h2>Our Services</h2>
-        <p>找到最適合你的指尖風格</p>
-      </div>
+<main>
 
-      <div class="services">
-        <article class="service">
-          <h3>單色美甲</h3>
-          <div class="price">NT$ 依報價</div>
-          <p>簡約、耐看，打造日常質感。</p>
-        </article>
-        <article class="service">
-          <h3>造型設計</h3>
-          <div class="price">NT$ 依款式</div>
-          <p>依照喜歡的風格，設計專屬款式。</p>
-        </article>
-        <article class="service">
-          <h3>卸甲服務</h3>
-          <div class="price">NT$ 依狀況</div>
-          <p>依原有凝膠及指甲狀況評估。</p>
-        </article>
-      </div>
-    </section>
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow">YOUR BEAUTY, YOUR MOMENT</div>
 
-    <section id="booking">
-      <div class="section-title">
-        <h2>Make an Appointment</h2>
-        <p>填寫預約需求，期待與你見面</p>
-      </div>
+      <h1>A little beauty,<br>a lot of you.</h1>
 
-      <form id="bookingForm">
-        <label for="name">姓名 *</label>
-        <input id="name" name="name" required
-          placeholder="請輸入姓名">
+      <p>
+        為日常留一點溫柔，讓每一次美甲，<br>
+        都成為專屬於你的美好時刻。
+      </p>
 
-        <label for="contact">聯絡方式 *</label>
-        <input id="contact" name="contact" required
-          placeholder="LINE ID 或電話">
+      <a class="button" href="#booking">預約我的美甲</a>
+    </div>
+  </section>
 
-        <label for="service">預約項目 *</label>
-        <select id="service" name="service" required>
-          <option value="">請選擇服務</option>
-          <option>單色美甲</option>
-          <option>造型設計</option>
-          <option>卸甲服務</option>
-        </select>
+  <section id="services">
 
-        <label for="date">希望預約日期 *</label>
-        <input id="date" name="date" type="date" required>
+    <div class="section-title">
+      <h2>Our Services</h2>
+      <p>找到最適合你的指尖風格</p>
+    </div>
 
-        <label for="time">希望預約時段 *</label>
-        <select id="time" name="time" required>
-          <option value="">請選擇時段</option>
-          <option>10:00</option>
-          <option>12:00</option>
-          <option>14:00</option>
-          <option>16:00</option>
-          <option>18:00</option>
-        </select>
+    <div class="services" id="serviceCards">
+      <p>正在載入服務項目...</p>
+    </div>
 
-        <label for="notes">款式需求或備註</label>
-        <textarea id="notes" name="notes"
-          placeholder="例如：是否需要卸甲、喜歡的款式"></textarea>
+  </section>
 
-        <button class="button" type="submit">送出預約需求</button>
-        <div id="message" role="status"></div>
-      </form>
-    </section>
-  </main>
+  <section id="booking">
 
-  <footer>
-    <div class="logo">Ceris Nail</div>
-    <p>讓美好，從指尖開始。</p>
-    <p>© Ceris Nail</p>
-  </footer>
+    <div class="section-title">
+      <h2>Make an Appointment</h2>
+      <p>填寫預約需求，期待與你見面</p>
+    </div>
 
-  <script>
-    const dateInput = document.getElementById("date");
-    const today = new Date();
-    const localToday = new Date(
-      today.getTime() - today.getTimezoneOffset() * 60000
+    <form id="bookingForm">
+
+      <label for="name">姓名 *</label>
+      <input
+        id="name"
+        name="name"
+        required
+        maxlength="50"
+        placeholder="請輸入姓名"
+      >
+
+      <label for="contact">聯絡方式 *</label>
+      <input
+        id="contact"
+        name="contact"
+        required
+        maxlength="100"
+        placeholder="LINE ID 或電話"
+      >
+
+      <label for="service">預約項目 *</label>
+      <select id="service" name="service" required>
+        <option value="">載入服務項目中...</option>
+      </select>
+
+      <label for="date">希望預約日期 *</label>
+      <input
+        id="date"
+        name="date"
+        type="date"
+        required
+      >
+
+      <label for="time">希望預約時段 *</label>
+      <select id="time" name="time" required>
+        <option value="">請選擇時段</option>
+        <option value="10:00">10:00</option>
+        <option value="12:00">12:00</option>
+        <option value="14:00">14:00</option>
+        <option value="16:00">16:00</option>
+        <option value="18:00">18:00</option>
+      </select>
+
+      <label for="notes">款式需求或備註</label>
+      <textarea
+        id="notes"
+        name="notes"
+        maxlength="1000"
+        placeholder="例如：是否需要卸甲、喜歡的款式"
+      ></textarea>
+
+      <button class="button" id="submitButton" type="submit">
+        送出預約需求
+      </button>
+
+      <div id="message" role="status" aria-live="polite"></div>
+
+    </form>
+  </section>
+
+</main>
+
+<footer>
+  <div class="logo">Ceris Nail</div>
+  <p>讓美好，從指尖開始。</p>
+  <p>© Ceris Nail</p>
+</footer>
+
+<script>
+  // =================================
+  // 1. Supabase 資料庫連線設定
+  // =================================
+
+  const SUPABASE_URL =
+    "https://vksoazfxtfeletbckxtu.supabase.co";
+
+  const SUPABASE_KEY =
+    "請在這裡貼上你的sb_publishable金鑰";
+
+  const db = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+  // =================================
+  // 2. 取得網頁元素
+  // =================================
+
+  const form = document.getElementById("bookingForm");
+  const serviceSelect = document.getElementById("service");
+  const serviceCards = document.getElementById("serviceCards");
+  const dateInput = document.getElementById("date");
+  const message = document.getElementById("message");
+  const submitButton = document.getElementById("submitButton");
+
+  // =================================
+  // 3. 設定可預約日期
+  // =================================
+
+  function getLocalDate() {
+    const now = new Date();
+
+    return new Date(
+      now.getTime() - now.getTimezoneOffset() * 60000
     ).toISOString().slice(0, 10);
+  }
 
-    dateInput.min = localToday;
+  dateInput.min = getLocalDate();
 
-    document.getElementById("bookingForm").addEventListener(
-      "submit", function(event) {
-        event.preventDefault();
-        document.getElementById("message").textContent =
-          "這是預覽版本，尚未真正送出預約。下一步將連接雲端資料庫。";
+  function showMessage(text, type) {
+    message.textContent = text;
+    message.className = type;
+  }
+
+  // =================================
+  // 4. 從資料庫讀取美甲服務
+  // =================================
+
+  async function loadServices() {
+
+    serviceSelect.innerHTML =
+      '<option value="">載入服務項目中...</option>';
+
+    const { data, error } = await db
+      .from("services")
+      .select("id, name, price, duration_minutes, description")
+      .eq("is_active", true)
+      .order("id");
+
+    if (error) {
+      console.error("服務載入錯誤：", error);
+
+      serviceSelect.innerHTML =
+        '<option value="">服務載入失敗</option>';
+
+      serviceCards.textContent =
+        "目前無法載入服務項目，請稍後再試。";
+
+      showMessage("服務載入失敗，請重新整理網頁。", "error");
+
+      return;
+    }
+
+    serviceSelect.innerHTML =
+      '<option value="">請選擇服務</option>';
+
+    serviceCards.replaceChildren();
+
+    if (!data || data.length === 0) {
+      serviceCards.textContent = "目前沒有開放的服務項目。";
+      return;
+    }
+
+    data.forEach(service => {
+
+      // 建立預約選單
+      const option = document.createElement("option");
+
+      option.value = service.id;
+
+      option.textContent =
+        service.name +
+        "（" + service.duration_minutes + " 分鐘）" +
+        (service.price > 0
+          ? " NT$ " + service.price
+          : "（價格洽詢）");
+
+      serviceSelect.appendChild(option);
+
+      // 建立服務卡片
+      const card = document.createElement("article");
+      card.className = "service";
+
+      const title = document.createElement("h3");
+      title.textContent = service.name;
+
+      const price = document.createElement("div");
+      price.className = "price";
+      price.textContent = service.price > 0
+        ? "NT$ " + service.price
+        : "價格洽詢";
+
+      const description = document.createElement("p");
+      description.textContent =
+        service.description || "歡迎預約洽詢。";
+
+      card.append(title, price, description);
+      serviceCards.appendChild(card);
+
+    });
+  }
+
+  // =================================
+  // 5. 送出預約資料
+  // =================================
+
+  form.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    if (!form.reportValidity()) return;
+
+    if (!serviceSelect.value) {
+      showMessage("請選擇美甲服務項目。", "error");
+      return;
+    }
+
+    const booking = {
+
+      customer_name:
+        document.getElementById("name").value.trim(),
+
+      contact:
+        document.getElementById("contact").value.trim(),
+
+      service_id:
+        Number(serviceSelect.value),
+
+      booking_date:
+        dateInput.value,
+
+      booking_time:
+        document.getElementById("time").value,
+
+      notes:
+        document.getElementById("notes").value.trim() || null
+
+    };
+
+    if (!booking.customer_name || !booking.contact) {
+      showMessage("請完整填寫姓名及聯絡方式。", "error");
+      return;
+    }
+
+    if (booking.booking_date < getLocalDate()) {
+      showMessage("不能預約過去的日期。", "error");
+      return;
+    }
+
+    submitButton.disabled = true;
+    submitButton.textContent = "預約送出中...";
+
+    showMessage("正在確認並送出預約資料...", "info");
+
+    try {
+
+      const { error } = await db
+        .from("bookings")
+        .insert(booking);
+
+      if (error) {
+
+        console.error("預約錯誤：", error);
+
+        if (error.code === "23505") {
+          showMessage(
+            "這個時段已經有人預約囉！\n請選擇其他日期或時間。",
+            "error"
+          );
+        } else if (error.code === "23503") {
+          showMessage(
+            "服務項目不存在，請重新整理網頁。",
+            "error"
+          );
+        } else if (error.code === "23514") {
+          showMessage(
+            "預約日期、時間或資料格式不符合規定。",
+            "error"
+          );
+        } else {
+          showMessage(
+            "預約送出失敗，請稍後再試。",
+            "error"
+          );
+        }
+
+        return;
       }
-    );
-  </script>
+
+      showMessage(
+        "預約需求已成功送出！\n請等待美甲師確認，期待與你見面 ♡",
+        "success"
+      );
+
+      form.reset();
+
+      dateInput.min = getLocalDate();
+
+    } catch (error) {
+
+      console.error(error);
+
+      showMessage(
+        "系統連線發生問題，請稍後再試。",
+        "error"
+      );
+
+    } finally {
+
+      submitButton.disabled = false;
+      submitButton.textContent = "送出預約需求";
+
+    }
+
+  });
+
+  // =================================
+  // 6. 網頁啟動
+  // =================================
+
+  loadServices();
+
+</script>
+
 </body>
 </html>
